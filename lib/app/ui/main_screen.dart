@@ -73,7 +73,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   void _addBeanitems() {
     _textBeanList.value = List.from(_textBeanList.value)
-      ..addAll(List<TextBeanWidget>.generate(5, (index) => TextBeanWidget()));
+      ..addAll(List<TextBeanWidget>.generate(4, (index) => TextBeanWidget()));
   }
 
   @override
