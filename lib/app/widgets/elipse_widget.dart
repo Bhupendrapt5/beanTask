@@ -49,3 +49,21 @@ class CenterBeanWidget extends StatelessWidget {
     return Image.asset(AssetPNG.centerPiece);
   }
 }
+
+class TextBeanWidget extends StatelessWidget {
+  const TextBeanWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(AssetPNG.textBean);
+  }
+}
+
+class RegularBeanWidget extends StatelessWidget {
+  const RegularBeanWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(AssetPNG.regularBean);
+  }
+}
