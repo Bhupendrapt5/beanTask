@@ -63,7 +63,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           }
         }
       });
-    Future.delayed(const Duration(milliseconds: 1000)).then((value) {
+    Future.delayed(const Duration(milliseconds: 2000)).then((value) {
       _controller.forward();
       _fadeController.forward();
     });
@@ -73,7 +73,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   void _addBeanitems() {
     _textBeanList.value = List.from(_textBeanList.value)
-      ..addAll(List<TextBeanWidget>.generate(4, (index) => TextBeanWidget()));
+      ..addAll(
+        List<TextBeanWidget>.generate(4, (index) => TextBeanWidget()),
+      );
   }
 
   @override
@@ -128,10 +130,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               SizedBox(height: ScreenUtil().setHeight(40)),
               Stack(
+                alignment: Alignment.center,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(40)),
+                        horizontal: ScreenUtil().setHeight(40)),
                     child: ReactanlgeTableWidget(),
                   ),
                   Positioned.fill(
