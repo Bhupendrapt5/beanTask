@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:so_stronk_challange/app/ui/main_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 

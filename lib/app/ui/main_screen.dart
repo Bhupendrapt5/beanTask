@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_stronk_challange/app/widgets/elipse_widget.dart';
+import 'package:so_stronk_challange/app/widgets/table_widget.dart';
 import 'package:so_stronk_challange/utils/colors.dart';
 import 'package:so_stronk_challange/utils/flutter_screenutil.dart';
 
@@ -17,6 +18,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late final Animation<double> _circular;
   late final Animation<double> _opacity1;
   late final Animation<double> _opacity2;
+
+  ValueNotifier<List<TextBeanWidget>> _textBeanList =
+      ValueNotifier<List<TextBeanWidget>>([]);
   int _count = 0;
   @override
   void initState() {
@@ -44,6 +48,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     _opacity1 = Tween(begin: 1.0, end: 0.0).animate(_fadeController)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
+          _addBeanitems();
           _fadeController2.forward();
         }
       });
@@ -52,17 +57,23 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         if (_count != 2) {
           if (status == AnimationStatus.completed) {
             _fadeController2.reverse();
+            _addBeanitems();
           } else if (status == AnimationStatus.dismissed) {
             _fadeController2.forward();
           }
         }
       });
-    Future.delayed(const Duration(milliseconds: 800)).then((value) {
+    Future.delayed(const Duration(milliseconds: 1000)).then((value) {
       _controller.forward();
       _fadeController.forward();
     });
 
     super.initState();
+  }
+
+  void _addBeanitems() {
+    _textBeanList.value = List.from(_textBeanList.value)
+      ..addAll(List<TextBeanWidget>.generate(5, (index) => TextBeanWidget()));
   }
 
   @override
@@ -83,12 +94,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 ColorBase.darkBlue,
               ]),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 120,
-          ),
+        child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              SizedBox(height: ScreenUtil().setHeight(120)),
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -116,6 +126,33 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                   ),
                 ],
               ),
+              SizedBox(height: ScreenUtil().setHeight(40)),
+              Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(40)),
+                    child: ReactanlgeTableWidget(),
+                  ),
+                  Positioned.fill(
+                    top: 40,
+                    left: 0,
+                    child: ValueListenableBuilder<List<TextBeanWidget>>(
+                        valueListenable: _textBeanList,
+                        builder: (context, value, child) {
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => Align(
+                                alignment: Alignment.topLeft,
+                                child: TextBeanWidget()),
+                            itemCount: value.length,
+                          );
+                        }),
+                  ),
+                ],
+              ),
+              SizedBox(height: ScreenUtil().setHeight(120)),
             ],
           ),
         ),
@@ -133,28 +170,30 @@ class _BeanSetOne extends StatelessWidget {
     return Container(
       height: mediaQueryData.size.height,
       width: mediaQueryData.size.width,
-      child: Stack(children: [
-        Positioned(
-          left: 30,
-          top: 120,
-          child: RegularBeanWidget(),
-        ),
-        Positioned(
-          right: 40,
-          top: 30,
-          child: RegularBeanWidget(),
-        ),
-        Positioned(
-          right: 10,
-          bottom: 20,
-          child: RegularBeanWidget(),
-        ),
-        Positioned(
-          left: 30,
-          bottom: -10,
-          child: RegularBeanWidget(),
-        ),
-      ]),
+      child: Stack(
+        children: [
+          Positioned(
+            left: 30,
+            top: 120,
+            child: RegularBeanWidget(),
+          ),
+          Positioned(
+            right: 40,
+            top: 30,
+            child: RegularBeanWidget(),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 20,
+            child: RegularBeanWidget(),
+          ),
+          Positioned(
+            left: 30,
+            bottom: -10,
+            child: RegularBeanWidget(),
+          ),
+        ],
+      ),
     );
   }
 }

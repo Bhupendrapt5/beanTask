@@ -59,7 +59,11 @@ class TextBeanWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(AssetPNG.textBean);
+    return Image.asset(
+      AssetPNG.textBean,
+      height: ScreenUtil().setHeight(100),
+      width: ScreenUtil().setWidth(220),
+    );
   }
 }
 
