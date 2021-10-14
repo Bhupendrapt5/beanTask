@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:so_stronk_challange/app/widgets/center_elipse_widget.dart';
+import 'package:so_stronk_challange/app/widgets/elipse_widget.dart';
 import 'package:so_stronk_challange/utils/colors.dart';
+import 'package:so_stronk_challange/utils/flutter_screenutil.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 375, height: 812, allowFontScaling: true);
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -29,7 +31,15 @@ class MainScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              CenterElipseWidget(),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  CenterElipseWidget(),
+                  MiddleElipseWidget(),
+                  SmallerElipseWidget(),
+                  CenterBeanWidget(),
+                ],
+              ),
             ],
           ),
         ),
