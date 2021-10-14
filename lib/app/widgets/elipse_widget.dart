@@ -46,7 +46,11 @@ class CenterBeanWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(AssetPNG.centerPiece);
+    return Image.asset(
+      AssetPNG.centerPiece,
+      height: ScreenUtil().setHeight(350),
+      width: ScreenUtil().setWidth(350),
+    );
   }
 }
 
@@ -64,6 +68,10 @@ class RegularBeanWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(AssetPNG.regularBean);
+    return Image.asset(
+      AssetPNG.regularBean,
+      height: ScreenUtil().setHeight(100),
+      width: ScreenUtil().setWidth(100),
+    );
   }
 }
