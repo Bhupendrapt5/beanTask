@@ -13,32 +13,55 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late final AnimationController _controller;
   late final AnimationController _fadeController;
+  late final AnimationController _fadeController2;
   late final Animation<double> _circular;
   late final Animation<double> _opacity1;
+  late final Animation<double> _opacity2;
   int _count = 0;
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
     );
     _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _fadeController2 = AnimationController(
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     );
     _circular = Tween(begin: 0.0, end: 1.0).animate(_controller)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed && _count < 2) {
-          Future.delayed(const Duration(milliseconds: 300)).then((value) {
+          Future.delayed(const Duration(milliseconds: 200)).then((value) {
             _controller.forward(from: 0);
             _count++;
           });
         }
       });
-    _opacity1 = Tween(begin: 1.0, end: 0.0).animate(_fadeController);
+    _opacity1 = Tween(begin: 1.0, end: 0.0).animate(_fadeController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _fadeController2.forward();
+        }
+      });
+    _opacity2 = Tween(begin: 0.0, end: 1.0).animate(_fadeController2)
+      ..addStatusListener((status) {
+        if (_count != 2) {
+          if (status == AnimationStatus.completed) {
+            _fadeController2.reverse();
+          } else if (status == AnimationStatus.dismissed) {
+            _fadeController2.forward();
+          }
+        }
+      });
+    Future.delayed(const Duration(milliseconds: 800)).then((value) {
+      _controller.forward();
+      _fadeController.forward();
+    });
 
-    _controller.forward();
-    _fadeController.forward();
     super.initState();
   }
 
@@ -62,7 +85,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 20,
             vertical: 120,
           ),
           child: Column(
@@ -70,42 +92,26 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  RotationTransition(
-                    turns: _circular,
-                    child: CenterElipseWidget(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: RotationTransition(
+                      turns: _circular,
+                      child: CenterElipseWidget(),
+                    ),
                   ),
                   MiddleElipseWidget(),
                   SmallerElipseWidget(),
                   CenterBeanWidget(),
-                  Positioned(
-                    left: 10,
+                  Positioned.fill(
                     child: FadeTransition(
                       opacity: _opacity1,
-                      child: RegularBeanWidget(),
+                      child: _BeanSetOne(),
                     ),
                   ),
-                  Positioned(
-                    right: 40,
-                    top: 20,
+                  Positioned.fill(
                     child: FadeTransition(
-                      opacity: _opacity1,
-                      child: RegularBeanWidget(),
-                    ),
-                  ),
-                  Positioned(
-                    right: -20,
-                    bottom: 20,
-                    child: FadeTransition(
-                      opacity: _opacity1,
-                      child: RegularBeanWidget(),
-                    ),
-                  ),
-                  Positioned(
-                    left: 30,
-                    bottom: -20,
-                    child: FadeTransition(
-                      opacity: _opacity1,
-                      child: RegularBeanWidget(),
+                      opacity: _opacity2,
+                      child: _BeanSetTwo(),
                     ),
                   ),
                 ],
@@ -114,6 +120,76 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BeanSetOne extends StatelessWidget {
+  const _BeanSetOne({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQueryData = MediaQuery.of(context);
+    return Container(
+      height: mediaQueryData.size.height,
+      width: mediaQueryData.size.width,
+      child: Stack(children: [
+        Positioned(
+          left: 30,
+          top: 120,
+          child: RegularBeanWidget(),
+        ),
+        Positioned(
+          right: 40,
+          top: 30,
+          child: RegularBeanWidget(),
+        ),
+        Positioned(
+          right: 10,
+          bottom: 20,
+          child: RegularBeanWidget(),
+        ),
+        Positioned(
+          left: 30,
+          bottom: -10,
+          child: RegularBeanWidget(),
+        ),
+      ]),
+    );
+  }
+}
+
+class _BeanSetTwo extends StatelessWidget {
+  const _BeanSetTwo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQueryData = MediaQuery.of(context);
+    return Container(
+      height: mediaQueryData.size.height,
+      width: mediaQueryData.size.width,
+      child: Stack(children: [
+        Positioned(
+          left: 0,
+          top: 40,
+          child: RegularBeanWidget(),
+        ),
+        Positioned(
+          right: 0,
+          top: 40,
+          child: RegularBeanWidget(),
+        ),
+        Positioned(
+          right: 40,
+          bottom: 80,
+          child: RegularBeanWidget(),
+        ),
+        Positioned(
+          left: 30,
+          bottom: -10,
+          child: RegularBeanWidget(),
+        ),
+      ]),
     );
   }
 }
